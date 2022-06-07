@@ -1,0 +1,5 @@
+@import "npm:@picocss/pico/css/pico.css";
+
+.hidden {
+  display: none;
+}

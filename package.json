@@ -1,0 +1,20 @@
+{
+  "name": "zeropool-substrate-faucet-fronend",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Dmitry Vdovin <voidxnull@gmail.com>",
+  "source": "src/index.html",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
+  "scripts": {
+    "dev": "parcel",
+    "build": "parcel build",
+    "prebuild": "rm -rf dist/*"
+  },
+  "devDependencies": {
+    "parcel": "^2.4.1"
+  },
+  "dependencies": {
+    "@picocss/pico": "^1.5.0",
+    "libzeropool-rs-wasm-web": "file:../libzeropool-rs/libzeropool-rs-wasm/web"
+  }
+}
