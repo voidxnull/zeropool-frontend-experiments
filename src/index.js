@@ -1,11 +1,18 @@
-import { Proof, Params, UserAccount, UserState, default as initWasm } from 'libzeropool-rs-wasm-web';
-
+import * as Comlink from 'comlink';
+import { default as initWasm, Params, UserState, UserAccount } from 'libzeropool-rs-wasm-web';
 const wasmUrl = new URL('npm:libzeropool-rs-wasm-web/libzeropool_rs_wasm_bg.wasm', import.meta.url);
-const paramsUrl = new URL('../assets/transfer_params.bin', import.meta.url);;
+const paramsUrl = new URL('../assets/transfer_params.bin', import.meta.url);
+const workerUrl = new URL('./worker.js', import.meta.url, { type: "module" });
 
-let params, state, account;
+let methods, params, state, account;
 
-async function init(set) {
+async function init() {
+  console.log('Initializing worker...');
+  const worker = new Worker(workerUrl);
+  methods = Comlink.wrap(worker);
+  await methods.init();
+  console.log('Initialization complete.');
+
   await initWasm(wasmUrl);
   const paramsBuf = await fetch(paramsUrl).then(r => r.arrayBuffer());
   params = Params.fromBinary(new Uint8Array(paramsBuf));
@@ -17,20 +24,9 @@ async function init(set) {
 }
 
 async function benchProof() {
-  console.log("Creating transaction...");
   const txData = await account.createDeposit({ amount: "1", fee: "0" });
-  console.log("Generating proof...");
-  const time = bench(() => Proof.tx(params, txData.public, txData.secret));
-
+  const time = await methods.benchProofMulticore(txData.public, txData.secret);
   document.getElementById("bench-time").innerText = `${time}ms`;
-}
-
-function bench(func) {
-  const start = new Date;
-  func();
-  const time = (new Date - start);
-  console.log(`${time}ms`);
-  return time;
 }
 
 init();
