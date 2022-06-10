@@ -12,13 +12,20 @@
   <main class="container">
     <div class="main-form">
       <h1>Proof Generation Benchmark</h1>
-      <button id="start-bench">Start</button>
-      <div id="bench-time-block" class="grid">
-        <span>Time:</span><span id="bench-time">N/A</span>
-      </div>
+      <section>
+        <button id="start-bench-st">Start singlethread</button>
+        <div class="grid">
+          <span>Time:</span><span id="bench-time-st">N/A</span>
+        </div>
+      </section>
+      <section>
+        <button id="start-bench-mt">Start multithread</button>
+        <div class="grid">
+          <span>Time:</span><span id="bench-time-mt">N/A</span>
+        </div>
+      </section>
     </div>
   </main>
-
   <script src="./index.js" type="module"></script>
 </body>
 

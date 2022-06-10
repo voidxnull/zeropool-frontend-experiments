@@ -1,12 +1,9 @@
 import * as Comlink from 'comlink';
-import { default as initWasm, initThreadPool, Params, Proof } from 'libzeropool-rs-wasm-web';
-const wasmUrl = new URL('npm:libzeropool-rs-wasm-web/libzeropool_rs_wasm_bg.wasm', import.meta.url);
+import { default as initWasm, initThreadPool, Params, Proof } from 'libzeropool-rs-wasm-web-mt';
+const wasmUrl = new URL('npm:libzeropool-rs-wasm-web-mt/libzeropool_rs_wasm_bg.wasm', import.meta.url);
 const paramsUrl = new URL('../assets/transfer_params.bin', import.meta.url);
 
 let params;
-// self.Window = class Window {
-//   init() { }
-// };
 
 async function init() {
   await initWasm(wasmUrl);
@@ -15,7 +12,7 @@ async function init() {
   params = Params.fromBinary(new Uint8Array(paramsBuf));
 }
 
-async function benchProofMulticore(pub, sec) {
+async function benchProof(pub, sec) {
   const time = bench(() => Proof.tx(params, pub, sec));
   return time;
 }
@@ -30,5 +27,5 @@ function bench(func) {
 
 Comlink.expose({
   init,
-  benchProofMulticore,
+  benchProof,
 });

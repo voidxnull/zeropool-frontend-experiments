@@ -981,8 +981,15 @@ json5@^2.2.0:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
   integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
 
-"libzeropool-rs-wasm-web@file:../libzeropool-rs/libzeropool-rs-wasm/web":
-  version "0.3.8"
+libzeropool-rs-wasm-web-mt@0.3.10:
+  version "0.3.10"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt/-/libzeropool-rs-wasm-web-mt-0.3.10.tgz#94b49e11a6f8e07e0d834cc6c74d453794782234"
+  integrity sha512-XmEGu4wh1A3Mz9OUZ16XxWZdVXUwGp0AFSe+b53/2gBEPr7LgF83WJ+XmBQvQ3gGtKMsoMvE279WQveTcSHOTg==
+
+libzeropool-rs-wasm-web@0.3.10:
+  version "0.3.10"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.3.10.tgz#ff7b2128b0b6c47d6ca8da547526d631c311461e"
+  integrity sha512-5uWW4q8/+wWOnMraTqPmowYyfhvXALyJ+pp9kOS6iWDGBYJJ9uN9s+aAy+ea15tCUE1XsxgKkTqYOl9+TU52uQ==
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
