@@ -11,7 +11,7 @@ let libMtZkBob;
 let methods;
 
 async function initSt() {
-  await zpSt.default(wasmStUrl);
+  await zpSt.default();
   const state = await zpSt.UserState.init('test');
   const account = new zpSt.UserAccount(new Uint8Array(32), state);
 
@@ -25,7 +25,7 @@ async function initSt() {
 }
 
 async function initMt() {
-  await zpMt.default(wasmMtUrl);
+  await zpMt.default();
   const state = await zpMt.UserState.init('test');
   const account = new zpMt.UserAccount(new Uint8Array(32), state);
 
@@ -39,7 +39,7 @@ async function initMt() {
 }
 
 async function initMtZkBob() {
-  await zpMtZkBob.default(wasmMtUrl);
+  await zpMtZkBob.default();
   const state = await zpMtZkBob.UserState.init('test');
   const account = new zpMtZkBob.UserAccount(new Uint8Array(32), state);
 
@@ -53,19 +53,19 @@ async function initMtZkBob() {
 }
 
 async function benchProofSt() {
-  const txData = await libSt.account.createDeposit({ amount: "1", fee: "0" });
+  const txData = await libSt.account.createDeposit({ amount: "1", fee: "0", outputs: [] });
   const time = await libSt.methods.benchProofSt(txData.public, txData.secret);
   document.getElementById("bench-time-st").innerText = `${time}ms`;
 }
 
 async function benchProofMt() {
-  const txData = await libMt.account.createDeposit({ amount: "1", fee: "0" });
+  const txData = await libMt.account.createDeposit({ amount: "1", fee: "0", outputs: [] });
   const time = await libMt.methods.benchProofMt(txData.public, txData.secret);
   document.getElementById("bench-time-mt").innerText = `${time}ms`;
 }
 
 async function benchProofMtZkBob() {
-  const txData = await libMtZkBob.account.createDeposit({ amount: "1", fee: "0" });
+  const txData = await libMtZkBob.account.createDeposit({ amount: "1", fee: "0", outputs: [] });
   const time = await methods.benchProofMtZkBob(txData.public, txData.secret);
   document.getElementById("bench-time-mt-zkbob").innerText = `${time}ms`;
 }

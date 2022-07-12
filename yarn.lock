@@ -1100,10 +1100,10 @@ json5@^2.2.0, json5@^2.2.1:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.1.tgz#655d50ed1e6f95ad1a3caababd2b0efda10b395c"
   integrity sha512-1hqLFMSrGHRHxav9q9gNjJ5EXznIxGVO09xQRrwplcS8qs28pZ8s8hupZAmqDwZUmVZ2Qb2jnyPOWcDH8m8dlA==
 
-libzeropool-rs-wasm-web-mt-zkbob@0.3.13:
-  version "0.3.13"
-  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt-zkbob/-/libzeropool-rs-wasm-web-mt-zkbob-0.3.13.tgz#bb25ad53d95fd030d4b23898bb96df899476ec90"
-  integrity sha512-l+0sYFRaIZy7f5DblC8BhioLwXe0SIaJMylFOdRhOJHhiE9JCfn7B8BabpncZc8i9HsdTR4qWAcw4cUoC21PeQ==
+libzeropool-rs-wasm-web-mt-zkbob@0.3.14:
+  version "0.3.14"
+  resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web-mt-zkbob/-/libzeropool-rs-wasm-web-mt-zkbob-0.3.14.tgz#0992f4991f14b537be585fb74317aadd043b9c0a"
+  integrity sha512-bBbMivfwB35cZBpA5+OVZAKNyHGUMk0TUiiXhSrjSzRk14EyDuYFdueuJ7iXaW9ge+48RwZFuray1Xj17hcKgQ==
 
 libzeropool-rs-wasm-web-mt@0.3.13:
   version "0.3.13"

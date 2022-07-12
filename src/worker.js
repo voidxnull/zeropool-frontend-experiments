@@ -14,9 +14,9 @@ async function init() {
   await zpMt.initThreadPool(navigator.hardwareConcurrency);
   await zpMtZkBob.initThreadPool(navigator.hardwareConcurrency);
   const paramsBuf = await fetch(paramsUrl).then(r => r.arrayBuffer());
-  paramsSt = Params.fromBinary(new Uint8Array(paramsBuf));
-  paramsMt = Params.fromBinary(new Uint8Array(paramsBuf));
-  paramsMtZkBob = Params.fromBinary(new Uint8Array(paramsBuf));
+  paramsSt = zpSt.Params.fromBinary(new Uint8Array(paramsBuf));
+  paramsMt = zpMt.Params.fromBinary(new Uint8Array(paramsBuf));
+  paramsMtZkBob = zpMtZkBob.Params.fromBinary(new Uint8Array(paramsBuf));
 }
 
 
@@ -30,8 +30,8 @@ async function benchProofMt(pub, sec) {
   return time;
 }
 
-async function benchProofMtZkBob() {
-  const time = bench(() => zpMtZkBob.Proof.tx(paramsMtZkBob));
+async function benchProofMtZkBob(pub, sec) {
+  const time = bench(() => zpMtZkBob.Proof.tx(paramsMtZkBob, pub, sec));
   return time;
 }
 
