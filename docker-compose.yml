@@ -1,0 +1,13 @@
+version: '3'
+services:
+  zeropool-frontend-experiments:
+    image: nginx:alpine
+    container_name: zeropool-frontend-experiments
+    volumes:
+      - ./dist:/usr/share/nginx/html
+    ports:
+      - "8080:80"
+    environment:
+      - VIRTUAL_HOST=zeropool-frontend-experiments.localhost
+      - LETSENCRYPT_HOST=zeropool-frontend-experiments.localhost
+      - LETSENCRYPT_EMAIL=mail@test.com
