@@ -5,6 +5,7 @@ services:
     container_name: zeropool-frontend-experiments
     volumes:
       - ./dist:/usr/share/nginx/html
+      - ./nginx-config:/etc/nginx/conf.d
     ports:
       - "8080:80"
     environment:
