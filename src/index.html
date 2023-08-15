@@ -1,4 +1,4 @@
-<!-- html5 file -->
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,16 +12,26 @@
   <main class="container">
     <div class="main-form">
       <h1>Proof Generation Benchmark</h1>
-      <section>
+      <!-- <section>
         <button id="start-bench-st" class="bench-button" disabled aria-busy="true">Start singlethread</button>
         <div class="grid">
           <span>Time:</span><span id="bench-time-st">N/A</span>
         </div>
-      </section>
+      </section> -->
       <section>
-        <button id="start-bench-mt" class="bench-button" disabled aria-busy="true">Start multithread</button>
+        <h3>libzeropool multithreaded</h3>
+        <button id="init-mt" class="bench-button">Init</button>
+        <button id="start-bench-mt" class="bench-button" disabled>Bench</button>
         <div class="grid">
           <span>Time:</span><span id="bench-time-mt">N/A</span>
+        </div>
+      </section>
+      <section>
+        <h3>libzkbob multithreaded</h3>
+        <button id="init-bob" class="bench-button">Init</button>
+        <button id="start-bench-bob" class="bench-button" disabled>Bench</button>
+        <div class="grid">
+          <span>Time:</span><span id="bench-time-bob">N/A</span>
         </div>
       </section>
     </div>

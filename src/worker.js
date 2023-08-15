@@ -1,31 +1,53 @@
 import * as Comlink from 'comlink';
-import * as zpSt from 'libzeropool-rs-wasm-web';
 import * as zpMt from 'libzeropool-rs-wasm-web-mt';
-// const wasmUrl = new URL('npm:libzeropool-rs-wasm-web-mt/libzeropool_rs_wasm_bg.wasm', import.meta.url);
+import * as zkBob from 'libzkbob-rs-wasm-web-mt';
 const paramsUrl = new URL('../assets/transfer_params.bin', import.meta.url);
 
-let paramsSt, paramsMt;
+let params = {
+  mt: null,
+  bob: null,
+}
 
-async function init() {
-  console.log('worker: init')
-  await zpSt.default();
-  await zpMt.default();
-  await zpMt.initThreadPool(navigator.hardwareConcurrency);
+function selectBackend(backendName) {
+  if (backendName === 'mt') {
+    return zpMt;
+  } else if (backendName === 'bob') {
+    return zkBob;
+  } else {
+    throw new Error(`unknown backend ${backendName}`);
+  }
+}
+
+async function init(backendName) {
+  console.log(`worker: init ${backendName}`)
+
+  const lib = selectBackend(backendName);
+
+  try {
+    await lib.default(undefined, new WebAssembly.Memory({ initial: 64, maximum: 4096, shared: true }));
+    await lib.initThreadPool(navigator.hardwareConcurrency);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
+
   const paramsBuf = await fetch(paramsUrl).then(r => r.arrayBuffer());
-  paramsSt = zpSt.Params.fromBinary(new Uint8Array(paramsBuf));
-  paramsMt = zpMt.Params.fromBinary(new Uint8Array(paramsBuf));
-  console.log('worker: init done');
+
+  params[backendName] = lib.Params.fromBinary(new Uint8Array(paramsBuf));
+
+  console.log(`worker: init ${backendName} done`);
 }
 
-
-async function benchProofSt(pub, sec) {
-  console.log('worker: bench st start');
-  return bench(() => zpSt.Proof.tx(paramsSt, pub, sec));
-}
-
-async function benchProofMt(pub, sec) {
+async function benchProof(backendName, pub, sec) {
   console.log('worker: bench mt start');
-  return bench(() => zpMt.Proof.tx(paramsMt, pub, sec));
+
+  const lib = selectBackend(backendName);
+
+  console.log('proving bob', pub, sec);
+
+  zkBob.Proof
+
+  return bench(() => lib.Proof.tx(params[backendName], pub, sec));
 }
 
 function bench(func) {
@@ -38,6 +60,5 @@ function bench(func) {
 
 Comlink.expose({
   init,
-  benchProofMt,
-  benchProofSt,
+  benchProof,
 });

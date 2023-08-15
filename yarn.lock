@@ -1062,6 +1062,11 @@ libzeropool-rs-wasm-web@0.9.1:
   resolved "https://registry.yarnpkg.com/libzeropool-rs-wasm-web/-/libzeropool-rs-wasm-web-0.9.1.tgz#419de2c88ae48ff1daf9b56968a76d020cf6c2a8"
   integrity sha512-5zn9eC43uG6wopjS9/XBdPlKLRJ463jhGbCZu8sZaONeW5JjpHMnqYJegxrKRcxoT5jeXWY9b00epr0W/yhpOw==
 
+libzkbob-rs-wasm-web-mt@1.4.1:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/libzkbob-rs-wasm-web-mt/-/libzkbob-rs-wasm-web-mt-1.4.1.tgz#6b2e42d78eca4b1f8a5ce592507092c7ac760e3c"
+  integrity sha512-zaNPMC+53YsAP765oDxPb3sljR7vIFuut/RLWpArXeZ8llQbRLbjJS1hquv6Mv5jqIUqOn99jnX/3hPMcCPCGA==
+
 lightningcss-darwin-arm64@1.15.0:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/lightningcss-darwin-arm64/-/lightningcss-darwin-arm64-1.15.0.tgz#c4fad19f33d96545e92e98f4a664d36edf52f03c"

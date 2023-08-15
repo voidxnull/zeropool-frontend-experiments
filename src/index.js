@@ -1,79 +1,86 @@
 import * as Comlink from 'comlink';
-import * as zpSt from 'libzeropool-rs-wasm-web';
 import * as zpMt from 'libzeropool-rs-wasm-web-mt';
+import * as zkBob from 'libzkbob-rs-wasm-web-mt';
 
-let libSt;
-let libMt;
-let methods;
+let worker;
 
-function setButton(id, inProgress) {
+function selectBackend(backendName) {
+  if (backendName === 'mt') {
+    return zpMt;
+  } else if (backendName === 'bob') {
+    return zkBob;
+  } else {
+    throw new Error(`unknown backend ${backendName}`);
+  }
+}
+
+function setButtonInProgress(id, inProgress) {
   const button = document.getElementById(id);
   button.disabled = inProgress;
   button.setAttribute('aria-busy', inProgress);
 }
 
-async function initSt() {
-  await zpSt.default();
-  const state = await zpSt.UserState.init('test');
-  const account = new zpSt.UserAccount(new Uint8Array(32), state);
-
-  document.getElementById("start-bench-st")
-    .addEventListener("click", benchProofSt);
-
-  libSt = {
-    methods,
-    account,
-  };
+function enableButton(id) {
+  const button = document.getElementById(id);
+  button.disabled = false;
 }
 
-async function initMt() {
-  await zpMt.default();
-  const state = await zpMt.UserState.init('test');
-  const account = new zpMt.UserAccount(new Uint8Array(32), state);
-
-  document.getElementById("start-bench-mt")
-    .addEventListener("click", benchProofMt);
-
-  libMt = {
-    methods,
-    account,
-  };
+function disableButton(id) {
+  const button = document.getElementById(id);
+  button.disabled = true;
 }
 
-async function benchProofSt() {
-  console.log('bench st');
-  setButton('start-bench-st', true);
-  const txData = await libSt.account.createDeposit({ amount: "1", fee: "0", outputs: [] });
-  const time = await libSt.methods.benchProofSt(txData.public, txData.secret);
-  document.getElementById("bench-time-st").innerText = `${time}ms`;
-  setButton('start-bench-st', false);
-}
 
-async function benchProofMt() {
-  console.log('bench mt');
-  setButton('start-bench-mt', true);
-  const txData = await libMt.account.createDeposit({ amount: "1", fee: "0", outputs: [] });
-  const time = await libMt.methods.benchProofMt(txData.public, txData.secret);
-  document.getElementById("bench-time-mt").innerText = `${time}ms`;
-  setButton('start-bench-mt', false);
+async function initLib(backendName) {
+  const lib = selectBackend(backendName);
+  const initButton = `init-${backendName}`;
+  const startButton = `start-bench-${backendName}`;
+  const timeElement = `bench-time-${backendName}`;
+
+  let account
+
+  document.getElementById(initButton)
+    .addEventListener('click', async () => {
+      setButtonInProgress(initButton, true);
+
+      await lib.default(undefined, new WebAssembly.Memory({ initial: 64, maximum: 4096, shared: true }));
+      const state = await lib.UserState.init(`test-${backendName}`);
+
+      if (backendName === 'mt') {
+        account = new lib.UserAccount(new Uint8Array(32), state);
+      } else if (backendName === 'bob') {
+        account = new lib.UserAccount(new Uint8Array(32), 0, state, 'test');
+      }
+
+      await worker.init(backendName);
+
+      setButtonInProgress(initButton, false);
+      disableButton(initButton);
+      enableButton(startButton);
+    });
+
+  document.getElementById(startButton)
+    .addEventListener('click', async () => {
+      setButtonInProgress(startButton, true);
+      const txData = await account.createDeposit({ amount: '1', fee: '0', outputs: [] });
+      const time = await worker.benchProof(backendName, txData.public, txData.secret);
+      document.getElementById(timeElement).innerText = `${time}ms`;
+      setButtonInProgress(startButton, false);
+    });
 }
 
 async function init() {
-  console.log('Initializing worker...');
-  const worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
-  methods = Comlink.wrap(worker);
-  await methods.init();
-  console.log('Initialization complete.');
+  const w = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
+  worker = Comlink.wrap(w);
 
-  console.log('Initializing wasm libraries');
-  await initSt();
-  await initMt();
-  console.log('Initialization complete.');
+  await initLib('mt');
+  await initLib('bob');
 
-  const buttons = document.querySelectorAll('.bench-button');
-  buttons.forEach((button) => {
-    setButton(button.id, false);
-  });
+
+  // const buttons = document.querySelectorAll('.bench-button');
+  // buttons.forEach((button) => {
+  //   setButtonInProgress(button.id, false);
+  // });
 
 }
 
